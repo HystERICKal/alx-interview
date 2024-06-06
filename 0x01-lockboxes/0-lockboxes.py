@@ -28,7 +28,7 @@ def canUnlockAll(boxes):
             for key in keys:
                 try:
                     if temp_box.get(key) and temp_box.get(key) \
-                        .get('status') == 'opened/checked':
+                            .get('status') == 'opened/checked':
                         continue
                     temp_box[key] = {
                         'status': 'opened',
@@ -36,7 +36,7 @@ def canUnlockAll(boxes):
                     }
                 except (KeyError, IndexError):
                     continue
-        elif 'opened' in [singl.get('status') for singl in \
+        elif 'opened' in [singl.get('status') for singl in
                           temp_box.values()]:
             continue
         elif len(temp_box) == len(boxes):
