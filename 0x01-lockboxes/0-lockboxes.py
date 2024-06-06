@@ -16,31 +16,31 @@ def canUnlockAll(boxes):
     if len(boxes) <= 1 or boxes == [[]]:
         return True
 
-    aux = {}
+    temp_box = {}
     while True:
-        if len(aux) == 0:
-            aux[0] = {
+        if len(temp_box) == 0:
+            temp_box[0] = {
                 'status': 'opened',
                 'keys': boxes[0],
             }
-        keys = helper_func(aux)
+        keys = helper_func(temp_box)
         if keys:
             for key in keys:
                 try:
-                    if aux.get(key) and aux.get(key).get('status') \
-                       == 'opened/checked':
+                    if temp_box.get(key) and temp_box.get(key) \
+                        .get('status') == 'opened/checked':
                         continue
-                    aux[key] = {
+                    temp_box[key] = {
                         'status': 'opened',
                         'keys': boxes[key]
                     }
                 except (KeyError, IndexError):
                     continue
-        elif 'opened' in [singl.get('status') for singl in aux.values()]:
+        elif 'opened' in [singl.get('status') for singl in temp_box.values()]:
             continue
-        elif len(aux) == len(boxes):
+        elif len(temp_box) == len(boxes):
             break
         else:
             return False
 
-    return len(aux) == len(boxes)
+    return len(temp_box) == len(boxes)
