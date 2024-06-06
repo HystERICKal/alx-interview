@@ -36,7 +36,8 @@ def canUnlockAll(boxes):
                     }
                 except (KeyError, IndexError):
                     continue
-        elif 'opened' in [singl.get('status') for singl in temp_box.values()]:
+        elif 'opened' in [singl.get('status') for singl in \
+                          temp_box.values()]:
             continue
         elif len(temp_box) == len(boxes):
             break
