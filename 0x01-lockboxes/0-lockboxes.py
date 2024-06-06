@@ -1,42 +1,46 @@
 #!/usr/bin/python3
+"""Solve interview puzzle."""
 
-def helper_func(tempy):
-    for i, j in tempy.items():
-        if j.get('status') == 'opened':
-            j['status'] = 'opened/checked'
-            return j.get('keys')
+
+def look_next_opened_box(opened_boxes):
+    """Solve interview puzzle."""
+    for index, box in opened_boxes.items():
+        if box.get('status') == 'opened':
+            box['status'] = 'opened/checked'
+            return box.get('keys')
     return None
 
 
 def canUnlockAll(boxes):
+    """Solve interview puzzle."""
     if len(boxes) <= 1 or boxes == [[]]:
         return True
 
-    tempp = {}
+    aux = {}
     while True:
-        if len(tempp) == 0:
-            tempp[0] = {
+        if len(aux) == 0:
+            aux[0] = {
                 'status': 'opened',
                 'keys': boxes[0],
             }
-        keys = helper_func(tempp)
+        keys = look_next_opened_box(aux)
         if keys:
             for key in keys:
                 try:
-                    if tempp.get(key) and tempp.get(key).get('status') \
+                    if aux.get(key) and aux.get(key).get('status') \
                        == 'opened/checked':
                         continue
-                    tempp[key] = {
+                    aux[key] = {
                         'status': 'opened',
                         'keys': boxes[key]
                     }
-                except (KeyError, iError):
+                except (KeyError, IndexError):
                     continue
-        elif 'opened' in [j.get('status') for j in tempp.values()]:
+        elif 'opened' in [box.get('status') for box in aux.values()]:
             continue
-        elif len(tempp) == len(boxes):
+        elif len(aux) == len(boxes):
             break
         else:
             return False
 
-    return len(tempp) == len(boxes)
+    return len(aux) == len(boxes)
