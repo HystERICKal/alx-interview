@@ -4,7 +4,7 @@
 
 def helper_func(temp_box):
     """Solve interview puzzle."""
-    for i, singl in temp_box.items():
+    for index, singl in temp_box.items():
         if singl.get('status') == 'opened':
             singl['status'] = 'opened/checked'
             return singl.get('keys')
