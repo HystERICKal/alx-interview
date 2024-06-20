@@ -1,48 +1,50 @@
 #!/usr/bin/python3
-"""Read stdin line by line."""
-
+"""
+log parsing
+"""
 
 import sys
+import re
 
 
-def stdin_reader(the_dict, complete_sof):
-    """Read stdin line by line."""
-    print("File size: {}".format(complete_sof))
-    for i, j in sorted(the_dict.items()):
-        if j != 0:
-            print("{}: {}".format(i, j))
+def output(log: dict) -> None:
+    """
+    helper function to display stats
+    """
+    print("File size: {}".format(log["file_size"]))
+    for code in sorted(log["code_frequency"]):
+        if log["code_frequency"][code]:
+            print("{}: {}".format(code, log["code_frequency"][code]))
 
 
-complete_sof = 0
-the_num = 0
-temp_1 = 0
-the_dict = {"200": 0,
-            "301": 0,
-            "400": 0,
-            "401": 0,
-            "403": 0,
-            "404": 0,
-            "405": 0,
-            "500": 0}
+if __name__ == "__main__":
+    regex = re.compile(
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')  # nopep8
 
-try:
-    for x in sys.stdin:
-        extracted_sent = x.split()
-        extracted_sent = extracted_sent[::-1]
+    line_count = 0
+    log = {}
+    log["file_size"] = 0
+    log["code_frequency"] = {
+        str(code): 0 for code in [
+            200, 301, 400, 401, 403, 404, 405, 500]}
 
-        if len(extracted_sent) > 2:
-            temp_1 += 1
+    try:
+        for line in sys.stdin:
+            line = line.strip()
+            match = regex.fullmatch(line)
+            if (match):
+                line_count += 1
+                code = match.group(1)
+                file_size = int(match.group(2))
 
-            if temp_1 <= 10:
-                complete_sof += int(extracted_sent[0])
-                the_num = extracted_sent[1]
+                # File size
+                log["file_size"] += file_size
 
-                if (the_num in the_dict.keys()):
-                    the_dict[the_num] += 1
+                # status code
+                if (code.isdecimal()):
+                    log["code_frequency"][code] += 1
 
-            if (temp_1 == 10):
-                stdin_reader(the_dict, complete_sof)
-                temp_1 = 0
-
-finally:
-    stdin_reader(the_dict, complete_sof)
+                if (line_count % 10 == 0):
+                    output(log)
+    finally:
+        output(log)
