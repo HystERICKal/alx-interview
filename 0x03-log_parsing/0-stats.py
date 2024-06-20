@@ -1,39 +1,48 @@
 #!/usr/bin/python3
-"""
-Log parsing
-"""
+"""Read stdin line by line."""
+
 
 import sys
 
-if __name__ == '__main__':
 
-    filesize, count = 0, 0
-    codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
-    stats = {k: 0 for k in codes}
+def stdin_reader(the_dict, complete_sof):
+    """Read stdin line by line."""
+    print("File size: {}".format(complete_sof))
+    for i, j in sorted(the_dict.items()):
+        if j != 0:
+            print("{}: {}".format(i, j))
 
-    def print_stats(stats: dict, file_size: int) -> None:
-        print("File size: {:d}".format(filesize))
-        for k, v in sorted(stats.items()):
-            if v:
-                print("{}: {}".format(k, v))
 
-    try:
-        for line in sys.stdin:
-            count += 1
-            data = line.split()
-            try:
-                status_code = data[-2]
-                if status_code in stats:
-                    stats[status_code] += 1
-            except BaseException:
-                pass
-            try:
-                filesize += int(data[-1])
-            except BaseException:
-                pass
-            if count % 10 == 0:
-                print_stats(stats, filesize)
-        print_stats(stats, filesize)
-    except KeyboardInterrupt:
-        print_stats(stats, filesize)
-        raise
+complete_sof = 0
+the_num = 0
+temp_1 = 0
+the_dict = {"200": 0,
+            "301": 0,
+            "400": 0,
+            "401": 0,
+            "403": 0,
+            "404": 0,
+            "405": 0,
+            "500": 0}
+
+try:
+    for x in sys.stdin:
+        extracted_sent = x.split()
+        extracted_sent = extracted_sent[::-1]
+
+        if len(extracted_sent) > 2:
+            temp_1 += 1
+
+            if temp_1 <= 10:
+                complete_sof += int(extracted_sent[0])
+                the_num = extracted_sent[1]
+
+                if (the_num in the_dict.keys()):
+                    the_dict[the_num] += 1
+
+            if (temp_1 == 10):
+                stdin_reader(the_dict, complete_sof)
+                temp_1 = 0
+
+finally:
+    stdin_reader(the_dict, complete_sof)
