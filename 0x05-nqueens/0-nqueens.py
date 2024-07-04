@@ -23,7 +23,8 @@ def queens(temp_1, x=0, d=[], e=[], f=[]):
     if x < temp_1:
         for y in range(temp_1):
             if y not in d and x + y not in e and x - y not in f:
-                yield from queens(temp_1, x + 1, d + [y], e + [x + y], f + [x - y])
+                yield from queens(temp_1, x + 1, d + [y],
+                                  e + [x + y], f + [x - y])
     else:
         yield d
 
