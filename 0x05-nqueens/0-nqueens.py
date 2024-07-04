@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Solve the N queens problem."""
+"""Solve the N queens problem."""
 import sys
 
 
@@ -19,7 +19,7 @@ temp_1 = int(sys.argv[1])
 
 
 def queens(temp_1, x=0, d=[], e=[], f=[]):
-    """ Solve the N queens problem."""
+    """Solve the N queens problem."""
     if x < temp_1:
         for y in range(temp_1):
             if y not in d and x + y not in e and x - y not in f:
@@ -29,7 +29,7 @@ def queens(temp_1, x=0, d=[], e=[], f=[]):
 
 
 def solve(temp_1):
-    """ Solve the N queens problem."""
+    """Solve the N queens problem."""
     v = []
     x = 0
     for solution in queens(temp_1, 0):
